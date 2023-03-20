@@ -1,5 +1,5 @@
 # TechSolutions-Api
 
 Para fines de pruebas del sistemas la base de datos esta asociada a un servidor.
-el script de la creacion de las tablas y poblacion de datos se encuentra en el proyecto de infraestructura dentro de la carpeta de database
-la base de datos esta creada en sql serve.
+El script de la creación de la base de datos y las tablas y población de datos se encuentra en el proyecto de "TechSolutions.Persistence" dentro de la carpeta de "Context", "Db" y nombre del script "TechSolutions.sql". Debe ejecutar en sql server este script antes de correr el sistema.
+La base de datos está creada en sql server.
