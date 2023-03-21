@@ -1,11 +1,7 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using TechSolutions.Application.Feautres.Permission.Commands.CreatePermissionCommand;
-using TechSolutions.Application.Feautres.Permission.Commands.DeletePermissionCommand;
-using TechSolutions.Application.Feautres.Permission.Commands.UpdatePermissionCommand;
-using TechSolutions.Application.Feautres.Permission.Queries.GetAllPermissions;
-using TechSolutions.Application.Feautres.Permission.Queries.GetPermissionById;
+using TechSolutions.Application.Dtos.RequestDto;
+using TechSolutions.Application.Interfaces;
 
 namespace TechSolutions.WebApi.Controllers
 {
@@ -13,49 +9,49 @@ namespace TechSolutions.WebApi.Controllers
     [ApiController]
     public class PermissionController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IPermissionRepository _permissionRepository;
 
-        public PermissionController(IMediator mediator)
+        public PermissionController(IPermissionRepository permissionRepository)
         {
-            _mediator = mediator;
+            _permissionRepository = permissionRepository;
         }
 
-        //GET all api/<endpoin>
+        //GET all api/<Endpoint>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _mediator.Send(new GetAllPermissionsQuery{}));
+            return Ok(await _permissionRepository.listPermissions());
         }
 
-        //GET byId api/<endpoin>
+        //GET byId api/<Endpoint>
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            return Ok(await _mediator.Send(new GetPermissionByIdQuery { Id = id }));
+            return Ok(await _permissionRepository.PermissionById(id));
         }
 
-        //POST api/<endpoin>
+        //POST api/<Endpoint>
         [HttpPost]
-        public async Task<IActionResult> Post(CreatePermissionCommand command)
+        public async Task<IActionResult> Post(PermissionRequestDto requestDto)
         {
-            return Ok(await _mediator.Send(command));
+            return Ok(await _permissionRepository.AddPermission(requestDto));
         }
 
-        //PUT api/<endpoin>
+        //PUT api/<Endpoint>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, UpdatePermissionCommand command)
+        public async Task<IActionResult> Put(int id, PermissionRequestDto requestDto)
         {
-            if (id != command.Id)
+            if (id != requestDto.Id)
                 return BadRequest();
 
-            return Ok(await _mediator.Send(command));
+            return Ok(await _permissionRepository.UpdatePermission(id,requestDto));
         }
 
-        //DELETE api/<endpoin>
+        //DELETE api/<Endpoint>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            return Ok(await _mediator.Send(new DeletePermissionCommand { Id = id }));
+            return Ok(await _permissionRepository.DeletePermission(id));
         }
     }
 }

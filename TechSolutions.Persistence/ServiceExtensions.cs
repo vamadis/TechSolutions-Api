@@ -18,6 +18,7 @@ namespace TechSolutions.Persistence
             #region Repositories
             services.AddTransient(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
             services.AddTransient(typeof(IPermissionRepository), typeof(PermissionRepository));
+            services.AddTransient(typeof(IPermissionTypeRepository), typeof(PermissionTypeRepository));
             #endregion
         }
     }

@@ -1,11 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using TechSolutions.Application.Feautres.PermissionType.Commands.CreatePermissionTypeCommand;
-using TechSolutions.Application.Feautres.PermissionType.Commands.DeletePermissionTypeCommand;
-using TechSolutions.Application.Feautres.PermissionType.Commands.UpdatePermissionTypeCommand;
-using TechSolutions.Application.Feautres.PermissionType.Queries.GetAllPermissionTypes;
-using TechSolutions.Application.Feautres.PermissionType.Queries.GetPermissionTypeById;
+using TechSolutions.Application.Dtos;
+using TechSolutions.Application.Interfaces;
 
 namespace TechSolutions.WebApi.Controllers
 {
@@ -13,49 +10,49 @@ namespace TechSolutions.WebApi.Controllers
     [ApiController]
     public class PermissionTypeController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IPermissionTypeRepository _permissionType;
 
-        public PermissionTypeController(IMediator mediator)
+        public PermissionTypeController(IPermissionTypeRepository permissionType)
         {
-            _mediator = mediator;
+            _permissionType = permissionType;
         }
 
-        //GET all api/<endpoin>
+        //GET all api/<Endpoint>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _mediator.Send(new GetAllPermissionTypesQuery {}));
+            return Ok(await _permissionType.listPermissionTypes());
         }
 
-        //GET byid api/<endpoin>
+        //GET byid api/<Endpoint>
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            return Ok(await _mediator.Send(new GetPermissionTypeByIdQuery { Id = id }));
+            return Ok(await _permissionType.PermissionTypeById(id));
         }
 
-        //POST api/<endpoin>
+        //POST api/<Endpoint>
         [HttpPost]
-        public async Task<IActionResult> Post(CreatePermissionTypeCommand command)
+        public async Task<IActionResult> Post(PermissionTypeDto typeDto)
         {
-            return Ok(await _mediator.Send(command));
+            return Ok(await _permissionType.AddPermissionType(typeDto));
         }
 
-        //PUT api/<endpoin>
+        //PUT api/<Endpoint>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, UpdatePermissionTypeCommand command)
+        public async Task<IActionResult> Put(int id, PermissionTypeDto  typeDto)
         {
-            if (id != command.Id)
+            if (id != typeDto.Id)
                 return BadRequest();
 
-            return Ok(await _mediator.Send(command));
+            return Ok(await _permissionType.UpdatePermissionType(id,typeDto));
         }
 
-        //DELETE api/<endpoin>
+        //DELETE api/<Endpoint>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            return Ok(await _mediator.Send(new DeletePermissionTypeCommand { Id = id }));
+            return Ok(await _permissionType.DeletePermissionType(id));
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using TechSolutions.Application.Dtos;
-using TechSolutions.Application.Feautres.Permission.Commands.CreatePermissionCommand;
-using TechSolutions.Application.Feautres.PermissionType.Commands.CreatePermissionTypeCommand;
+using TechSolutions.Application.Dtos.RequestDto;
 using TechSolutions.Domain.Entities;
 
 namespace TechSolutions.Application.Mappings
@@ -11,13 +10,13 @@ namespace TechSolutions.Application.Mappings
         public GeneralProfileMapping()
         {
             #region Dtos
-            CreateMap<Permiso, PermisoDto>();
-            CreateMap<TipoPermiso, TipoPermisoDto>();
+            CreateMap<Permiso, PermissionDto>();
+            CreateMap<TipoPermiso, PermissionTypeDto>();
             #endregion
 
             #region Commands
-            CreateMap<CreatePermissionCommand, Permiso>();
-            CreateMap<CreatePermissionTypeCommand, TipoPermiso>();
+            CreateMap<PermissionRequestDto, Permiso>(); 
+            CreateMap<PermissionTypeDto, TipoPermiso>();
             #endregion
         }
     }

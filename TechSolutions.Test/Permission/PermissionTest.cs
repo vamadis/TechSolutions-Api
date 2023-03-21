@@ -1,26 +1,24 @@
 ﻿using AutoMapper;
-using TechSolutions.Application.Feautres.Permission.Commands.CreatePermissionCommand;
-using TechSolutions.Application.Feautres.Permission.Commands.DeletePermissionCommand;
-using TechSolutions.Application.Feautres.Permission.Commands.UpdatePermissionCommand;
+using TechSolutions.Application.Behaviours;
 using TechSolutions.Application.Interfaces;
 using TechSolutions.Domain.Entities;
+using TechSolutions.Persistence.Contexts;
+using TechSolutions.Persistence.Repository;
 using Xunit;
 
 namespace TechSolutions.Test.Permission
 {
     public class PermissionTest
     {
-        private readonly CreatePermissionCommandHandler _CreateRequest;
-        private readonly DeletePermissionCommandHandler _DeleteRequest;
-        private readonly UpdatePermissionCommandHandler _UpdateRequest;
+        private readonly PermissionRepository _CreateRequest;
+        private readonly PermissionValidator _validationRules;
+        private readonly TechSolutionsDbContext _context;
         private readonly IRepositoryAsync<Permiso> _repositoryAsync;
         private readonly IMapper _mapper;
 
         public PermissionTest()
         {
-            _CreateRequest = new CreatePermissionCommandHandler(_repositoryAsync, _mapper);
-            _DeleteRequest = new DeletePermissionCommandHandler(_repositoryAsync,_mapper);
-            _UpdateRequest = new UpdatePermissionCommandHandler(_repositoryAsync, _mapper);
+            _CreateRequest = new PermissionRepository(_context, _mapper, _validationRules, _repositoryAsync);
         }
         [Fact]
         public void GetVerifyCreateRequestIsNotNull()
@@ -31,14 +29,14 @@ namespace TechSolutions.Test.Permission
         [Fact]
         public void GetVerifyDeleteRequestIsNotNull()
         {
-            bool? result = _DeleteRequest.Equals(_repositoryAsync);
+            bool? result = _CreateRequest.Equals(_repositoryAsync);
             Assert.NotNull(result);
         }
 
         [Fact]
         public void GetVerifyUpdateRequestIsNotNull()
         {
-            bool? result = _UpdateRequest.Equals(_repositoryAsync);
+            bool? result = _CreateRequest.Equals(_repositoryAsync);
             Assert.NotNull(result);
         }
     }
